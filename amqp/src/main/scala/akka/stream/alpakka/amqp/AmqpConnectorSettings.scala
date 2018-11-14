@@ -135,7 +135,7 @@ object TemporaryQueueSourceSettings {
     TemporaryQueueSourceSettings(connectionProvider, exchange)
 }
 
-final case class AmqpPublishConfirmSettings(confirmTimeout: Long)
+final case class AmqpPublishConfirmSettings(confirmTimeout: Long = 1000)
 
 final class AmqpReplyToSinkSettings private (
     val connectionProvider: AmqpConnectionProvider,
@@ -190,8 +190,11 @@ final class AmqpSinkSettings private (
   def withDeclarations(declarations: immutable.Seq[Declaration]): AmqpSinkSettings =
     copy(declarations = declarations)
 
-  def withPublishConfirms(confirmTimeout: Long = 1000): AmqpSinkSettings =
+  def withPublishConfirms(confirmTimeout: Long): AmqpSinkSettings =
     copy(publishConfirm = Some(AmqpPublishConfirmSettings(confirmTimeout)))
+
+  def withPublishConfirms(): AmqpSinkSettings =
+    copy(publishConfirm = Some(AmqpPublishConfirmSettings()))
 
   /**
    * Java API

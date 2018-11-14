@@ -32,6 +32,7 @@ There are several types of @scaladoc[AmqpConnectionProvider](akka.stream.alpakka
 * @scaladoc[AmqpCachedConnectionProvider](akka.stream.alpakka.amqp.AmqpCachedConnectionProvider) which receive any other provider as parameter and caches the connection it provides to be used in all stages. By default it closes the connection whenever the last stage using the provider stops. Optionally, it takes `automaticRelease` boolean parameter so the connection is not automatically release and the user have to release it explicitly.
 
 ### Sending messages to AMQP server
+#### With a Sink
 
 First define a queue name and the declaration of the queue that the messages will be sent to.
 
@@ -60,6 +61,24 @@ Scala
 
 Java
 : @@snip [snip](/amqp/src/test/java/docs/javadsl/AmqpDocsTest.java) { #run-sink }
+
+#### With a Flow
+
+Create a flow, that accepts a Tuple2 of @scaladoc[ByteString](akka.util.ByteString) and a PassThrough element (a String in the example). The @scaladoc[ByteString](akka.util.ByteString) will be forwarded to the AMQP server, and the PassThrough element passed downstream.
+
+Scala
+: @@snip [snip](/amqp/src/test/scala/docs/scaladsl/AmqpDocsSpec.scala) { #create-publish-flow }
+
+Java
+: @@snip [snip](/amqp/src/test/java/docs/javadsl/AmqpDocsTest.java) { #create-publish-flow }
+
+Note: in This example, we activate AMQP's publish confirms so that only truly published elements pass this stage. This is completely optional.
+
+Scala
+: @@snip [snip](/amqp/src/test/scala/docs/scaladsl/AmqpDocsSpec.scala) { #run-publish-flow }
+
+Java
+: @@snip [snip](/amqp/src/test/java/docs/javadsl/AmqpDocsTest.java) { #run-publish-flow }
 
 ### Receiving messages from AMQP server
 
