@@ -111,7 +111,7 @@ class AmqpDocsSpec extends AmqpSpec {
         AmqpSinkSettings(connectionProvider)
           .withRoutingKey(queueName)
           .withDeclaration(queueDeclaration)
-          .withPublishConfirms() // Activate publish confirms (optional)
+          .withPublishConfirms(confirmTimeout = 1000)
       )
       //#create-publish-flow
 
