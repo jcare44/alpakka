@@ -6,7 +6,7 @@ package akka.stream.alpakka.amqp.impl
 
 import akka.Done
 import akka.annotation.InternalApi
-import akka.stream.alpakka.amqp.{AmqpPublishConfirmSettings, AmqpReplyToSinkSettings, OutgoingMessage}
+import akka.stream.alpakka.amqp.{AmqpPublishConfirmConfiguration, AmqpReplyToSinkSettings, OutgoingMessage}
 import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, InHandler}
 import akka.stream.{ActorAttributes, Attributes, Inlet, SinkShape}
 
@@ -37,7 +37,9 @@ private[amqp] final class AmqpReplyToSinkStage(settings: AmqpReplyToSinkSettings
       override val settings = stage.settings
 
       override def whenConnected(): Unit = {
-        if (settings.publishConfirm.isDefined) channel.confirmSelect()
+        if (settings.publishConfirm.isDefined) {
+          channel.confirmSelect()
+        }
         pull(in)
       }
 
@@ -81,7 +83,7 @@ private[amqp] final class AmqpReplyToSinkStage(settings: AmqpReplyToSinkSettings
               )
 
               settings.publishConfirm match {
-                case Some(AmqpPublishConfirmSettings(confirmTimeout)) =>
+                case Some(AmqpPublishConfirmConfiguration(confirmTimeout)) =>
                   Try(channel.waitForConfirmsOrDie(confirmTimeout)) match {
                     case Success(_) => tryPull(in)
                     case Failure(e) => onFailure(e)

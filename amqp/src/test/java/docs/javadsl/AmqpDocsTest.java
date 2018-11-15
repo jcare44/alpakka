@@ -173,7 +173,7 @@ public class AmqpDocsTest {
             AmqpSinkSettings.create(connectionProvider)
                 .withRoutingKey(queueName)
                 .withDeclaration(queueDeclaration)
-                .withPublishConfirms(1000));
+                .withPublishConfirm(1000));
     // #create-publish-flow
 
     // #run-publish-flow
