@@ -362,6 +362,10 @@ def alpakkaProject(projectId: String, moduleName: String, additionalSettings: sb
       AutomaticModuleName.settings(s"akka.stream.alpakka.$moduleName"),
       mimaPreviousArtifacts := Set(
         organization.value %% name.value % previousStableVersion.value
+          .map(v => {
+            println(v)
+            v
+          })
           .getOrElse(throw new Error("Unable to determine previous version"))
       )
     )
